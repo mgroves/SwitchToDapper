@@ -11,11 +11,22 @@ namespace DapperDemo
         [Test]
         public void MultiMapDefaultConvention()
         {
-            Connection.Execute(@"CREATE TABLE ComicBookCompanies (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT)");
-            var dc = Connection.ExecuteScalar<int>(@"INSERT INTO ComicBookCompanies (Name) VALUES ('D.C.'); select last_insert_rowid();");
+            Connection.Execute(
+                @"CREATE TABLE ComicBookCompanies (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT)");
+            var dc = Connection.ExecuteScalar<int>(
+                @"INSERT INTO ComicBookCompanies (Name)
+                  VALUES ('D.C.');
+                  SELECT last_insert_rowid();");
 
-            Connection.Execute(@"CREATE TABLE Heroes (Id INTEGER PRIMARY KEY AUTOINCREMENT, HeroName TEXT, ComicBookCompanyId INTEGER)");
-            Connection.Execute(@"INSERT INTO Heroes (HeroName, ComicBookCompanyId) VALUES (@HeroName, @ComicBookCompanyId)", new[]
+            Connection.Execute(
+                @"CREATE TABLE Heroes (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    HeroName TEXT,
+                    ComicBookCompanyId INTEGER)");
+            Connection.Execute(@"INSERT INTO Heroes (HeroName, ComicBookCompanyId)
+                VALUES (@HeroName, @ComicBookCompanyId)", new[]
                 {
                     new {HeroName = "Batman", ComicBookCompanyId = dc},
                     new {HeroName = "Superman", ComicBookCompanyId = dc},
@@ -26,7 +37,11 @@ namespace DapperDemo
                     INNER JOIN ComicBookCompanies c on c.Id = h.ComicBookCompanyId";
 
             var firstHero = Connection
-                .Query<Hero, ComicBookCompany, Hero>(sql, (hero, company) => { hero.ComicBookCompany = company; return hero; })
+                .Query<Hero, ComicBookCompany, Hero>(sql,
+                    (hero, company) => {
+                        hero.ComicBookCompany = company;
+                        return hero;
+                    })
                 .First();
 
             Assert.That(firstHero.HeroName, Is.EqualTo("Batman"));
@@ -53,7 +68,12 @@ namespace DapperDemo
                     INNER JOIN ComicBookCompanies c on c.CompanyId = h.ComicBookCompanyId";
 
             var firstHero = Connection
-                .Query<Hero, ComicBookCompany, Hero>(sql, (hero, company) => { hero.ComicBookCompany = company; return hero; },
+                .Query<Hero, ComicBookCompany, Hero>(sql,
+                    (hero, company) =>
+                    {
+                        hero.ComicBookCompany = company; 
+                        return hero;
+                    },
                  splitOn: "CompanyId")
                 .First();
 
