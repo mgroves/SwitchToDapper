@@ -53,15 +53,18 @@
     <Compile Include="1_Intro.cs" />
     <Compile Include="3_Bulk.cs" />
     <Compile Include="4_Errors.cs" />
+    <Compile Include="Entities\CrewMember.cs" />
     <Compile Include="Entities\ComicBookCompany.cs" />
     <Compile Include="Entities\Hero.cs" />
     <Compile Include="5_MultiMapping.cs" />
     <Compile Include="Entities\Person.cs" />
     <Compile Include="6_In.cs" />
     <Compile Include="7_MultipleResults.cs" />
+    <Compile Include="8_MultiMappingOneToMany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="2_Query.cs" />
     <Compile Include="Entities\Sidekick.cs" />
+    <Compile Include="Entities\Starship.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
