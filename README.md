@@ -1,0 +1,1 @@
+This is the code that is presented in the "Forget the big mapper, switch to Dapper" session.
