@@ -86,15 +86,31 @@ namespace DapperDemo
         [Test]
         public void MoreMultiMapCustomSplit()
         {
-            Connection.Execute(@"CREATE TABLE ComicBookCompanies (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT)");
-            var dc = Connection.ExecuteScalar<int>(@"INSERT INTO ComicBookCompanies (Name) VALUES ('D.C.'); select last_insert_rowid();");
+            Connection.Execute(@"
+                CREATE TABLE ComicBookCompanies (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT)");
+            var dc = Connection.ExecuteScalar<int>(@"
+                INSERT INTO ComicBookCompanies (Name) VALUES ('D.C.');
+                select last_insert_rowid();");
 
-            Connection.Execute(@"CREATE TABLE Heroes (Id INTEGER PRIMARY KEY AUTOINCREMENT, HeroName TEXT, ComicBookCompanyId INTEGER)");
-            var batman = Connection.ExecuteScalar<int>(@"INSERT INTO Heroes (HeroName, ComicBookCompanyId) VALUES (@HeroName, @ComicBookCompanyId); select last_insert_rowid();",
+            Connection.Execute(@"
+                CREATE TABLE Heroes (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    HeroName TEXT,
+                    ComicBookCompanyId INTEGER)");
+            var batman = Connection.ExecuteScalar<int>(@"
+                INSERT INTO Heroes (HeroName, ComicBookCompanyId) VALUES (@HeroName, @ComicBookCompanyId);
+                select last_insert_rowid();",
                 new {HeroName = "Batman", ComicBookCompanyId = dc});
 
-            Connection.Execute(@"CREATE TABLE Sidekicks (Id INTEGER PRIMARY KEY AUTOINCREMENT, SidekickName TEXT, HeroId INTEGER)");
-            Connection.Execute(@"INSERT INTO Sidekicks (SidekickName, HeroId) VALUES (@SidekickName, @HeroId)",
+            Connection.Execute(@"
+                CREATE TABLE Sidekicks (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    SidekickName TEXT,
+                    HeroId INTEGER)");
+            Connection.Execute(@"
+                    INSERT INTO Sidekicks (SidekickName, HeroId) VALUES (@SidekickName, @HeroId)",
                 new {SidekickName = "Robin", HeroId = batman});
 
             var sql = @"SELECT s.Id, s.SidekickName, h.Id, h.HeroName, c.Id, c.Name
